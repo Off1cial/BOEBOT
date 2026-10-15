@@ -33,6 +33,25 @@ static inline void LED_WriteOn( led_t* led )
     analogWrite( led->pin, led->brightness );
 }
 
+static inline void LED_WriteAnalogFraction( led_t* led, float fraction )
+{
+    if (!led) return;
+    float frac = fraction;
+    clamp(0.0f, 1.0f, &frac);
+
+    analogWrite( led->pin, rnd_float_int(255.0f * frac) );
+}
+
+static inline void LED_WriteAnalogInteger( led_t* led, unsigned char brightness )
+{
+    if (!led) return;
+    analogWrite( led->pin, brightness );
+}
+
+
+
+
+
 static inline void LED_WriteOff( led_t* led )
 {
     analogWrite( led->pin, 0 );

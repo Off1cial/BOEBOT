@@ -8,7 +8,12 @@ SKETCH := $(CURDIR)
 all: build
 
 build:
-	$(CLI) compile --fqbn $(BOARD) --build-path build $(SKETCH)
+#	$(CLI) compile --fqbn $(BOARD) --build-path build $(SKETCH)
+	$(CLI) compile \
+		--fqbn $(BOARD) \
+		--build-path build \
+		--build-property compiler.c.elf.extra_flags="-Wl,-u,vfprintf -lprintf_flt -lm" \
+		$(SKETCH)
 
 upload:
 	$(CLI) upload -p $(PORT) --fqbn $(BOARD) --input-dir build $(SKETCH)

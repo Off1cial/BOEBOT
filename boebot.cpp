@@ -21,7 +21,9 @@ void BOBOT_Init( boebot_t* bot, pin_t pin_leftwheel, pin_t pin_rightwheel )
 
 void BOBOT_DriveWheel( boebot_t *bot, wheelindex_t wheel_index, float drive )
 {
-    int mov = ( drive + 1.0f ) * 90;
+    float clamped = drive;
+    clamp( 0.0f, 1.0f, &clamped );
+    int mov = ( clamped + 1.0f ) * 90;
     bot->wheels[wheel_index].servo.write( mov );
 }
 
@@ -30,6 +32,8 @@ void BOBOT_DriveStraight( boebot_t* bot, float drive )
     // I wonder if the number of cyles between each call can be large enough
     // to cause one wheel to move well before the other, or atleast after an amount of time
     // significant enough to affect the direction of the bot
-    BOBOT_DriveWheel( bot, BWHEEL_RIGHT, drive );
-    BOBOT_DriveWheel( bot, BWHEEL_LEFT, drive );
+    float clamped = drive;
+    clamp( -1.0f, 1.0f, &clamped );
+    BOBOT_DriveWheel( bot, BWHEEL_RIGHT, clamped );
+    BOBOT_DriveWheel( bot, BWHEEL_LEFT, clamped );
 }

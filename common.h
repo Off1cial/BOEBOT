@@ -88,4 +88,10 @@ static inline unsigned long CurrentTime( void )
 }
 
 
+// Some reason C++ doesnt provide an inline rounding function?
+static inline int rnd_float_int( float value )
+{
+    return (int)(value + 0.5f);
+}
+
 #endif
