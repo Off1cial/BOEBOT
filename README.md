@@ -17,7 +17,7 @@
 
 #### From the Terminal:
 ``` 
-git clone https://github.com/redw0od0/boebot.git
+git clone https://github.com/Off1cial/BOEBOT.git
 ```
 #### With the GUI:
 - Download the repository as a .zip and extract it to a directory of your choice
@@ -107,7 +107,7 @@ cd ~/dev/arduino
 
 Clone the repository into this folder
 ```
-git clone https://github.com/redw0od0/boebot.git
+git clone https://github.com/Off1cial/BOEBOT.git
 ```
 
 You should then have the directory ~/dev/arduino/boebot/ , which contains .h, .hpp, .c, .cpp, .ino files etc..
