@@ -1,31 +1,36 @@
-#include "led.h"
-#include "common.h"
+#include "led.hpp"
+#include "common.hpp"
 #include "boebot.hpp"
 
-led_t led_red;
-led_t led_green;
 unsigned long current_time = 0;
 
+// Global variables, stop the pointers going out of scope
 boebot_t bot;
+led_t led_red;
 
 void setup( void )
 {
   Serial.begin(9600);
-  LED_SetPin( &led_red, 11 );
-  LED_SetBrightness( &led_red, 1.0f );
-
-  LED_SetPin( &led_green, 10 );
-  LED_SetBrightness( &led_green, 1.0f );
+  BOEBOT_Init( &bot, BWHEEL_LEFT_PIN, BWHEEL_RIGHT_PIN );
+  
+  
+  pin_t example_pin = 10;
+  LED_SetPin( &led_red, 10 ); // Automatically sets the pin to OUTPUT
+  LED_SetBrightnessValue( &led_red, 255 ); // Default/maximum brightness
 
 }
 
 
+
 void loop( void )
 {
-  current_time = millis();
-  float phase = (current_time % 2000UL) * ( (2 * M_PI) / 2000.0f);
-  int brightness = rnd_float_int(255.0f * (sinf(phase) + 1.0f) * 0.5f);
-  //LED_Blink( &led_red, current_time, 1000 );
-  //LED_Blink( &led_green, current_time, 500 );
-  LED_WriteAnalogFraction( &led_red, (sinf(phase) + 1.0f) * 0.5f);
+  current_time = CurrentTime;
+  
+
+  //BOEBOT_Steer( &bot, -0.5f );
+  //BOEBOT_SteerLerp( &bot, 0.5f, 0.8f);
+  BOEBOT_Accelerate( &bot, 1.0f, 0.0001f);
+  BOEBOT_DriveStraight( &bot, bot.forward );
+
+
 }

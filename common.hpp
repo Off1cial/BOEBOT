@@ -1,8 +1,14 @@
-#ifndef COMMON_H
-#define COMMON_H
+#pragma once
 
 #include <Arduino.h>
 #define MAX_MSG 64 // Tight limit
+
+typedef unsigned char pin_t; // 8 bits
+                             //
+                             //
+
+
+extern unsigned long current_time;
 
 #ifdef __cplusplus
 template <typename T>
@@ -24,6 +30,18 @@ template <typename T>
 inline T MIN( T a, T b )
 {
     return (a < b) ? a : b;
+}
+
+template <typename T>
+inline T MAX3( T a, T b, T c )
+{
+    return (MAX(a, b), c);
+}
+
+template <typename T>
+inline T MIN3( T a, T b, T c )
+{
+    return (MIN(a, b), c);
 }
 #endif
 
@@ -94,4 +112,14 @@ static inline int rnd_float_int( float value )
     return (int)(value + 0.5f);
 }
 
-#endif
+
+static inline float rnd_float(float var)
+{
+    // 37.66666 * 100 =3766.66
+    // 3766.66 + .5 =3767.16    for rounding off value
+    // then type cast to int so value is 3767
+    // then divided by 100 so the value converted into 37.67
+    float value = (int)(var * 100 + .5);
+    return (float)value / 100;
+}
+

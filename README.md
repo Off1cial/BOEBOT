@@ -5,7 +5,7 @@
 
 - BOEBOT wheel control within the normalised range of -1.0f to 1.0f
 - LED control and initialisation
-- 'common.h' header file for a variety of useful functions
+- 'common.hpp' header file for a variety of useful functions
 
 **There will be more to come with time and requests**
 

@@ -1,5 +1,5 @@
 BOARD  := arduino:avr:uno
-PORT   ?= /dev/ttyUSB0
+PORT   ?= /dev/ttyACM0
 CLI    := arduino-cli
 SKETCH := $(CURDIR)
 
@@ -21,7 +21,7 @@ upload:
 flash: build upload
 
 monitor:
-	$(CLI) monitor -p $(PORT) --config baudrate=9600
+	$(CLI) monitor -p $(PORT) --config baudrate=115200
 
 ports:
 	$(CLI) board list

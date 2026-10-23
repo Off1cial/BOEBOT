@@ -1,7 +1,6 @@
-#ifndef LED_H
-#define LED_H
+#pragma once
 
-#include "common.h"
+#include "common.hpp"
 #include <Arduino.h>
 
 typedef struct led_t
@@ -9,76 +8,43 @@ typedef struct led_t
     int pin;
     unsigned char brightness; // 0 - 255
     unsigned long last_toggle; // For non-blocking blink behaviour
+    unsigned long blink_delay;
     bool active;
 } led_t;
 
-// magical C++ function overload
-static inline void LED_SetBrightness( led_t* led, float fraction )
+
+
+// Initialisation
+void LED_SetPin( led_t* led, int pin );
+
+static void LED_SetBrightnessFraction( led_t* led, float fraction ) // Set the brightness as a fraction of its maximum
 {
-    if (!led) return;
-    // Add bounds checking/clamping?
     float frac = fraction;
-    clamp( 0.0f, 1.0f, &frac );
-    led->brightness = (unsigned char)(frac * 255);
+    clamp(0.0f, 1.0f, &frac);
+    led->brightness = 255 * frac;
 }
 
-static inline void LED_SetBrightness( led_t* led, unsigned char brightness )
+
+static void LED_SetBrightnessValue( led_t* led, unsigned char brightness )
 {
-    if (!led) return;
     led->brightness = brightness;
 }
 
-static inline void LED_WriteOn( led_t* led )
-{
-    analogWrite( led->pin, led->brightness );
-}
 
-static inline void LED_WriteAnalog( led_t* led, float fraction )
-{
-    if (!led) return;
-    float frac = fraction;
-    clamp(0.0f, 1.0f, &frac);
-
-    analogWrite( led->pin, rnd_float_int(255.0f * frac) );
-}
-
-static inline void LED_WriteAnalog( led_t* led, unsigned char brightness )
-{
-    if (!led) return;
-    analogWrite( led->pin, brightness );
-}
+void LED_SetBlinkDelay( led_t* led, unsigned long delay_ms ); // Set the blinking interval in ms
 
 
+// Blink the LED if the time is appropriate
+void LED_Blink( led_t* led, unsigned long current_time, unsigned long delay_ms ); 
+
+// Writes the brightness to the pin
+void LED_WriteOn( led_t* led );
+// Writes 0 to the pin
+void LED_WriteOff( led_t* led );
+
+// Write (fraction * brightness) to the pin
+void LED_WriteAnalog( led_t* led, float fraction ); 
+// Write the directy brightness value to the pin
+void LED_WriteAnalog( led_t* led, unsigned char brightness );
 
 
-
-static inline void LED_WriteOff( led_t* led )
-{
-    analogWrite( led->pin, 0 );
-}
-
-static inline void LED_WriteState( led_t* led )
-{
-    analogWrite( led->pin, 255 * led->active );
-}
-
-static inline void LED_SetPin( led_t* led, int pin )
-{
-    if (!led) return;
-    pinMode( pin, OUTPUT );
-    led->pin = pin;
-}
-
-static inline void LED_Blink( led_t* led, unsigned long current_time, unsigned long delay_ms )
-{
-    if (current_time - led->last_toggle < delay_ms)
-        return;
-
-    led->last_toggle = current_time;
-    led->active = !led->active;
-    LED_WriteState( led );
-}
-
-
-
-#endif
